@@ -3290,6 +3290,7 @@ def get_bearer_token(cli_ctx):
     profile = Profile(cli_ctx=cli_ctx)
     credential, _, _ = profile.get_login_credentials()
     bearer_token = credential.get_token().token
+    logger.warning("def get_bearer_token(cli_ctx):")
     return bearer_token
 
 

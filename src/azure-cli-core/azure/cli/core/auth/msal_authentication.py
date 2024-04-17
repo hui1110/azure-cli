@@ -96,6 +96,7 @@ class UserCredential(PublicClientApplication):
             # launch browser, but show the error message and `az login` command instead.
             else:
                 raise
+        logger.warning("start build_sdk_access_token")
         return build_sdk_access_token(result)
 
 

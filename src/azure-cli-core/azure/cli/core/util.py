@@ -870,6 +870,7 @@ def send_raw_request(cli_ctx, method, url, headers=None, uri_parameters=None,  #
     from requests import Session, Request
     from requests.structures import CaseInsensitiveDict
 
+    logger.warning("send_raw_request..................")
     result = CaseInsensitiveDict()
     for s in headers or []:
         try:
@@ -947,6 +948,7 @@ def send_raw_request(cli_ctx, method, url, headers=None, uri_parameters=None,  #
     if '{subscriptionId}' in url:
         url = url.replace('{subscriptionId}', cli_ctx.data['subscription_id'] or profile.get_subscription_id())
 
+    logger.warning("Prepare the Bearer token for `Authorization` header")
     # Prepare the Bearer token for `Authorization` header
     if not skip_authorization_header and url.lower().startswith('https://'):
         # Prepare `resource` for `get_raw_token`
@@ -990,6 +992,8 @@ def send_raw_request(cli_ctx, method, url, headers=None, uri_parameters=None,  #
 
     # https://requests.readthedocs.io/en/latest/user/advanced/#prepared-requests
     s = Session()
+    s.cert = "new_cert.pem"
+    logger.warning("get cert from local")
     req = Request(method=method, url=url, headers=headers, params=uri_parameters, data=body)
     prepped = s.prepare_request(req)
 

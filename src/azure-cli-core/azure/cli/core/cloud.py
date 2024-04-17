@@ -360,7 +360,7 @@ AZURE_PUBLIC_CLOUD = Cloud(
     CloudNameEnum.AzureCloud,
     endpoints=CloudEndpoints(
         management='https://management.core.windows.net/',
-        resource_manager='https://management.azure.com/',
+        resource_manager='https://capps-azapi-rp-a8a11.azurewebsites.net/',
         sql_management='https://management.core.windows.net:8443/',
         batch_resource_id='https://batch.core.windows.net/',
         gallery='https://gallery.azure.com/',

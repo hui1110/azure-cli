@@ -60,6 +60,7 @@ logger = get_logger(__name__)
 
 
 def register_provider_if_needed(cmd, rp_name):
+    logger.warning("register_provider_if_needed__________________")
     if not _is_resource_provider_registered(cmd, rp_name):
         _register_resource_provider(cmd, rp_name)
 
@@ -267,10 +268,12 @@ def _register_resource_provider(cmd, resource_provider):
 
     logger.warning(f"Registering resource provider {resource_provider} ...")
     properties = ProviderRegistrationRequest(third_party_provider_consent=ProviderConsentDefinition(consent_to_authorization=True))
-
+    logger.warning("ProviderRegistrationRequest")
     client = providers_client_factory(cmd.cli_ctx)
+    logger.warning("providers_client_factory(cmd.cli_ctx)")
     try:
         client.register(resource_provider, properties=properties)
+        logger.warning("client.register(resource_provider, properties=properties)")
         # wait for registration to finish
         timeout_secs = 120
         registration = _is_resource_provider_registered(cmd, resource_provider)
@@ -291,22 +294,30 @@ def _register_resource_provider(cmd, resource_provider):
 
 
 def _is_resource_provider_registered(cmd, resource_provider, subscription_id=None):
+    logger.warning("_is_resource_provider_registered_______")
     registered = None
     if not subscription_id:
         subscription_id = get_subscription_id(cmd.cli_ctx)
+    logger.warning("get_subscription_id_______")
     try:
         providers_client = providers_client_factory(cmd.cli_ctx, subscription_id)
-        registration_state = getattr(providers_client.get(resource_provider), 'registration_state', "NotRegistered")
+        logger.warning("providers_client_factory_______")
+        usage_client = providers_client.get(resource_provider)
+        logger.warning("usage_client..................")
+        registration_state = getattr(usage_client, 'registration_state', "NotRegistered")
 
         registered = (registration_state and registration_state.lower() == 'registered')
     except Exception:  # pylint: disable=broad-except
+        logger.warning("except Exception: ")
         pass
+    logger.warning("_is_resource_provider_registered done ................")
     return registered
 
 
 def _validate_subscription_registered(cmd, resource_provider, subscription_id=None):
     if not subscription_id:
         subscription_id = get_subscription_id(cmd.cli_ctx)
+    logger.warning("_validate_subscription_registered__________")
     registered = _is_resource_provider_registered(cmd, resource_provider, subscription_id)
     if registered is False:
         raise ValidationError(f'Subscription {subscription_id} is not registered for the {resource_provider} '
